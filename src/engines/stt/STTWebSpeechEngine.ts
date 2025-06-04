@@ -17,6 +17,7 @@ export default class STTWebSpeechEngine implements STTEngine {
   private onAfterMicPermission?: () => void;
   private onRecognizing?: (text: string) => void;
   private onRecognized?: (text: string) => void;
+  private onEnded?: () => void;
   private onCancelled?: (reason: string) => void;
 
   constructor(config: STTConfig) {
@@ -36,13 +37,13 @@ export default class STTWebSpeechEngine implements STTEngine {
         throw new Error("Invalid media devices.");
       }
 
-      await navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-        this.mediaStream = stream;
+      await navigator.mediaDevices.getUserMedia(constraints).then((mediaStream) => {
+        this.mediaStream = mediaStream;
         this.onMediaStream?.(this.mediaStream);
         this.onAfterMicPermission?.();
       });
     } catch (error) {
-      throw new Error("Failed to get user media: " + error);
+      throw new Error("Error accessing media devices: " + error);
     }
   }
 
@@ -51,12 +52,14 @@ export default class STTWebSpeechEngine implements STTEngine {
     onAfterMicPermission,
     onRecognizing,
     onRecognized,
+    onEnded,
     onCancelled,
   }: STTStartOptions) {
     this.onMediaStream = onMediaStream;
     this.onAfterMicPermission = onAfterMicPermission;
     this.onRecognizing = onRecognizing;
     this.onRecognized = onRecognized;
+    this.onEnded = onEnded;
     this.onCancelled = onCancelled;
 
     if (!this.recognition) {
@@ -97,6 +100,10 @@ export default class STTWebSpeechEngine implements STTEngine {
             this.onRecognizing?.(interimTranscript);
           }
         }
+      };
+
+      this.recognition.onend = () => {
+        this.onEnded?.();
       };
 
       this.recognition.onerror = (event: SpeechRecognitionErrorEvent) => {

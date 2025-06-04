@@ -4,6 +4,7 @@ export default class TTSWebSpeechEngine implements TTSEngine {
   private config: TTSConfig;
   private mediaStream: MediaStream | null = null;
   private analyserNode: AnalyserNode | null = null;
+  private onMediaStream?: (stream: MediaStream | null) => void;
   private onAudioStarted?: () => void;
   private onAudioEnded?: () => void;
   private onError?: (error: unknown) => void;
@@ -20,7 +21,8 @@ export default class TTSWebSpeechEngine implements TTSEngine {
     return this.analyserNode;
   }
 
-  start(options?: TTSStartOptions): Promise<TTSResult> {
+  async start(options?: TTSStartOptions): Promise<TTSResult | void> {
+    this.onMediaStream = options?.onMediaStream;
     this.onAudioStarted = options?.onAudioStarted;
     this.onAudioEnded = options?.onAudioEnded;
     this.onError = options?.onError;
@@ -39,23 +41,20 @@ export default class TTSWebSpeechEngine implements TTSEngine {
     utterance.rate = this.config.rate || 1;
     utterance.volume = this.config.volume || 1;
 
-    return new Promise((resolve, reject) => {
-      const startTime = Date.now();
+    const startTime = Date.now();
 
-      utterance.onend = () => {
-        resolve({
-          audio: new Blob([], { type: "audio/wav" }),
-          duration: Date.now() - startTime,
-        });
+    utterance.onend = () => {
+      return {
+        audio: new Blob([], { type: "audio/wav" }),
+        duration: Date.now() - startTime,
       };
+    };
 
-      utterance.onerror = (event) => {
-        this.onError?.(new Error("Speech synthesis error"));
-        reject(new Error("Speech synthesis error"));
-      };
+    utterance.onerror = (event) => {
+      this.onError?.(new Error("Speech synthesis error: " + event.error));
+    };
 
-      window.speechSynthesis.speak(utterance);
-    });
+    window.speechSynthesis.speak(utterance);
   }
 
   stop() {

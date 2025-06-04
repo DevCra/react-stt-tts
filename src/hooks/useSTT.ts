@@ -7,25 +7,43 @@ export const useSTT = (): STTHookResult => {
   const { sttConfig } = useSTTConfig();
 
   const engineRef = useRef<STTEngine | null>(null);
+  const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const [isListening, setIsListening] = useState(false);
 
   const start = useCallback(async (options?: STTStartOptions) => {
     setIsListening(true);
-    await engineRef.current?.start(options);
+
+    const startOptions: STTStartOptions = {
+      ...options,
+      ...(options?.onMediaStream
+        ? options.onMediaStream
+        : {
+            onMediaStream: (stream) => {
+              setMediaStream(stream);
+            },
+          }),
+    };
+
+    await engineRef.current?.start(startOptions);
   }, []);
 
   const stop = useCallback(() => {
     setIsListening(false);
+    setMediaStream(null);
     engineRef.current?.stop();
+    engineRef.current = null;
   }, []);
 
   useEffect(() => {
-    engineRef.current = STTFactory.create(sttConfig.model, sttConfig);
+    if (!engineRef.current) {
+      engineRef.current = STTFactory.create(sttConfig.model, sttConfig);
+    }
   }, [sttConfig.model, sttConfig]);
 
   return {
     start,
     stop,
+    mediaStream,
     isListening,
   };
 };
