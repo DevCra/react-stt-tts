@@ -1,0 +1,73 @@
+{
+  "name": "react-stt-tts",
+  "version": "0.1.0",
+  "private": true,
+  "description": "React Speech-to-Text and Text-to-Speech library with multiple engine support",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rimraf dist",
+    "prepublishOnly": "pnpm run build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext \"./**/*.{ts,tsx}\"",
+    "format": "prettier --write \"./**/*.{ts,tsx}\""
+  },
+  "keywords": [
+    "react",
+    "speech-to-text",
+    "text-to-speech",
+    "stt",
+    "tts",
+    "speech-recognition",
+    "speech-synthesis",
+    "web-speech-api",
+    "web-audio-api",
+    "gemini",
+    "google cloud",
+    "azure",
+    "return-zero",
+    "naver-clova",
+    "realtime",
+    "AI",
+    "voice-assistant"
+  ],
+  "author": "Aaron",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DevCra/react-stt-tts"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/dom-speech-recognition": "^0.0.6",
+    "@types/node": "^22.15.21",
+    "@types/react": "^19.1.5",
+    "@types/react-dom": "^19.1.5",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "eslint": "^9.27.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "jiti": "^2.4.2",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1"
+  }
+}
