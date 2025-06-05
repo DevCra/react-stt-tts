@@ -26,6 +26,7 @@ export interface TTSEngine {
 
 export interface TTSStartOptions {
   text?: string;
+  speaker?: string;
   onMediaStream?: (stream: MediaStream | null) => void; // Media Stream transfer
   onAudioStarted?: () => void;
   onAudioEnded?: () => void;

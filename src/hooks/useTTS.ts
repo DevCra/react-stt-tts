@@ -48,9 +48,9 @@ export const useTTS = (): TTSHookResult => {
 
   useEffect(() => {
     if (!engineRef.current) {
-      engineRef.current = TTSFactory.create(ttsConfig.model, ttsConfig);
+      engineRef.current = TTSFactory.create(ttsConfig);
     }
-  }, [ttsConfig.model, ttsConfig]);
+  }, [ttsConfig]);
 
   return {
     start,

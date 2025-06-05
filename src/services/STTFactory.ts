@@ -1,24 +1,33 @@
 import {
   STTWebSpeechEngine,
-  STTAzureSpeechSDKEngine,
+  STTWebAudioEngine,
+  STTGoogleGeminiEngine,
   STTGoogleCloudV2Engine,
+  STTAzureSpeechSDKEngine,
+  STTAzureRealtimeAPIEngine,
   STTReturnZeroEngine,
 } from "@/engines/stt";
-import type { STTConfig, STTEngine, STTModel } from "@/types/stt";
+import type { STTConfig, STTEngine } from "@/types/stt";
 
 export default class STTFactory {
-  static create(model: STTModel, config: STTConfig): STTEngine {
-    switch (model) {
+  static create(config: STTConfig): STTEngine {
+    switch (config.model) {
       case "web-speech":
         return new STTWebSpeechEngine(config);
-      case "azure-speech-sdk":
-        return new STTAzureSpeechSDKEngine(config);
+      case "web-audio":
+        return new STTWebAudioEngine(config);
+      case "google-gemini":
+        return new STTGoogleGeminiEngine(config);
       case "google-cloud-v2":
         return new STTGoogleCloudV2Engine(config);
+      case "azure-speech-sdk":
+        return new STTAzureSpeechSDKEngine(config);
+      case "azure-realtime-api":
+        return new STTAzureRealtimeAPIEngine(config);
       case "return-zero":
         return new STTReturnZeroEngine(config);
       default:
-        throw new Error(`Unsupported STT model: ${model}`);
+        throw new Error(`Unsupported STT model: ${config.model}`);
     }
   }
 }

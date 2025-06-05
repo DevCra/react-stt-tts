@@ -36,9 +36,9 @@ export const useSTT = (): STTHookResult => {
 
   useEffect(() => {
     if (!engineRef.current) {
-      engineRef.current = STTFactory.create(sttConfig.model, sttConfig);
+      engineRef.current = STTFactory.create(sttConfig);
     }
-  }, [sttConfig.model, sttConfig]);
+  }, [sttConfig]);
 
   return {
     start,
