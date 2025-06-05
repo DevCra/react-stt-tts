@@ -3,7 +3,7 @@ import TTSWebSpeech from "./components/web-speech/TTSWebSpeech";
 
 function App() {
   return (
-    <div className="flex flex-col items-center justify-center h-full">
+    <div className="flex flex-col items-center justify-center h-full gap-10">
       <STTWebSpeech />
       <TTSWebSpeech />
     </div>
