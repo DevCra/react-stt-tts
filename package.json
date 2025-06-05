@@ -1,7 +1,6 @@
 {
   "name": "react-stt-tts",
   "version": "0.1.0",
-  "private": true,
   "description": "React Speech-to-Text and Text-to-Speech library with multiple engine support",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -12,7 +11,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsc --build && tsup",
     "dev": "tsup --watch",
     "clean": "rimraf dist",
     "prepublishOnly": "pnpm run build",
@@ -52,6 +51,9 @@
   "peerDependencies": {
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
+  },
+  "dependencies": {
+    "microsoft-cognitiveservices-speech-sdk": "^1.44.1"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
