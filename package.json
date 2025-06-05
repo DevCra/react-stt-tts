@@ -46,7 +46,8 @@
     "url": "https://github.com/DevCra/react-stt-tts"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0",
+    "npm": ">=10.0.0"
   },
   "peerDependencies": {
     "react": ">=18.0.0",

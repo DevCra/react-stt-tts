@@ -24,6 +24,11 @@ React based Speech-to-Text and Text-to-Speech library with multiple engine suppo
 - TypeScript support
 - Tree-shakeable
 
+## Requirements
+
+- Node >= 18
+- Npm >= 10
+
 ## Installation
 
 ```bash
