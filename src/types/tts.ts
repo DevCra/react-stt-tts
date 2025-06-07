@@ -9,6 +9,7 @@ export type TTSModel =
 
 export interface TTSConfig {
   model: TTSModel;
+  speaker?: string;
   apiKey?: string;
   voice?: string;
   language?: string;
@@ -26,7 +27,6 @@ export interface TTSEngine {
 
 export interface TTSStartOptions {
   text?: string;
-  speaker?: string;
   onMediaStream?: (stream: MediaStream | null) => void; // Media Stream transfer
   onAudioStarted?: () => void;
   onAudioEnded?: () => void;
