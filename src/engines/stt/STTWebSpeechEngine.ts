@@ -27,10 +27,6 @@ export default class STTWebSpeechEngine implements STTEngine {
     };
   }
 
-  getMediaStream(): MediaStream | null {
-    return this.mediaStream;
-  }
-
   async getUserMedia(constraints: MediaStreamConstraints) {
     try {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {

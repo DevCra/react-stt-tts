@@ -20,7 +20,6 @@ export interface STTConfig {
 }
 
 export interface STTEngine {
-  getMediaStream(): MediaStream | null;
   start(options?: STTStartOptions): Promise<void>;
   stop(): void;
   mute(): void;

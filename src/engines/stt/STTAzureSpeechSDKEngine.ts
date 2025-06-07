@@ -15,10 +15,6 @@ export default class STTAzureSpeechSDKEngine implements STTEngine {
     this.config = config;
   }
 
-  getMediaStream(): MediaStream | null {
-    return null;
-  }
-
   async start(options?: STTStartOptions) {
     this.onMediaStream = options?.onMediaStream;
     this.onAfterMicPermission = options?.onAfterMicPermission;

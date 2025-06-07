@@ -15,10 +15,6 @@ export default class STTGoogleCloudV2Engine implements STTEngine {
     this.config = config;
   }
 
-  getMediaStream(): MediaStream | null {
-    return this.mediaStream;
-  }
-
   async start(options?: STTStartOptions) {
     this.onMediaStream = options?.onMediaStream;
     this.onAfterMicPermission = options?.onAfterMicPermission;
