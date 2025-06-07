@@ -41,6 +41,6 @@ export interface TTSResult {
 export interface TTSHookResult {
   start: (options: TTSStartOptions) => Promise<TTSResult>;
   stop: () => void;
-  getAnalyserNode: () => AnalyserNode | null;
   mediaStream: MediaStream | null;
+  analyserNode: AnalyserNode | null;
 }

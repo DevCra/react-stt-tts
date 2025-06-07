@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useMemo } from "react";
 import { useTTSConfig } from "@/providers/VoiceProvider";
 import TTSFactory from "@/services/TTSFactory";
 import type { TTSEngine, TTSHookResult, TTSStartOptions } from "@/types/tts";
@@ -39,14 +39,12 @@ export const useTTS = (): TTSHookResult => {
     engineRef.current = null;
   }, []);
 
-  const getAnalyserNode = useCallback(() => {
-    return engineRef.current?.getAnalyserNode() ?? null;
-  }, []);
+  const analyserNode = useMemo(() => engineRef.current?.getAnalyserNode() ?? null, []);
 
   return {
     start,
     stop,
-    getAnalyserNode,
     mediaStream,
+    analyserNode,
   };
 };
