@@ -13,10 +13,6 @@ export default class TTSGoogleGeminiEngine implements TTSEngine {
     this.config = config;
   }
 
-  getMediaStream(): MediaStream | null {
-    return this.mediaStream;
-  }
-
   // Analyze Waveform Data
   getAnalyserNode(): AnalyserNode | null {
     return this.analyserNode;

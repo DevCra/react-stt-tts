@@ -19,10 +19,9 @@ export interface TTSConfig {
 }
 
 export interface TTSEngine {
-  getMediaStream(): MediaStream | null;
-  getAnalyserNode(): AnalyserNode | null;
   start(options: TTSStartOptions): Promise<TTSResult>;
   stop(): void;
+  getAnalyserNode(): AnalyserNode | null;
 }
 
 export interface TTSStartOptions {
