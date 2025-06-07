@@ -3,7 +3,7 @@ import { useTTS } from "react-stt-tts";
 
 export default function TTSWebSpeech() {
   const [text, setText] = useState("");
-  const { start, stop, isSpeaking } = useTTS();
+  const { start, stop } = useTTS();
 
   const handleSpeak = () => {
     if (text.trim()) {
@@ -39,14 +39,13 @@ export default function TTSWebSpeech() {
         <div className="flex gap-2">
           <button
             onClick={handleSpeak}
-            disabled={isSpeaking || !text.trim()}
+            disabled={!text.trim()}
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
-            {isSpeaking ? "Playing..." : "Play"}
+            Play
           </button>
           <button
             onClick={stop}
-            disabled={!isSpeaking}
             className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             Stop
