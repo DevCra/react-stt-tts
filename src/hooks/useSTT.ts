@@ -10,7 +10,7 @@ export const useSTT = (): STTHookResult => {
 
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
-  const [isListening, setIsListening] = useState(false);
+  const [isStarted, setIsStarted] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
 
   const start = useCallback(
@@ -20,7 +20,7 @@ export const useSTT = (): STTHookResult => {
       }
 
       setIsInitialized(false);
-      setIsListening(true);
+      setIsStarted(false);
 
       const startOptions: STTStartOptions = {
         ...options,
@@ -35,6 +35,7 @@ export const useSTT = (): STTHookResult => {
         ?.start(startOptions)
         .then(() => {
           setIsInitialized(true);
+          setIsStarted(true);
         })
         .catch((error) => {
           throw error;
@@ -45,7 +46,7 @@ export const useSTT = (): STTHookResult => {
 
   const stop = useCallback(() => {
     setIsInitialized(false);
-    setIsListening(false);
+    setIsStarted(false);
     setMediaStream(null);
 
     engineRef.current?.stop();
@@ -69,7 +70,7 @@ export const useSTT = (): STTHookResult => {
     unmute,
     mediaStream,
     isInitialized,
-    isListening,
+    isStarted,
     isMuted,
   };
 };

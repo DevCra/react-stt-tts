@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useSTT } from "react-stt-tts";
 
 export default function STTWebSpeech() {
-  const { start, stop, isListening } = useSTT();
+  const { start, stop, isStarted } = useSTT();
 
   const [recognizedText, setRecognizedText] = useState("");
   const recognizedTextRef = useRef("");
@@ -33,14 +33,14 @@ export default function STTWebSpeech() {
         <div className="flex flex-col gap-4">
           <div className="flex gap-2 justify-center">
             <button
-              onClick={isListening ? handleStop : handleStart}
+              onClick={isStarted ? handleStop : handleStart}
               className={`px-4 py-2 rounded-lg font-medium ${
-                isListening
+                isStarted
                   ? "bg-red-500 hover:bg-red-600 text-white"
                   : "bg-blue-500 hover:bg-blue-600 text-white"
               }`}
             >
-              {isListening ? "Stop Recognition" : "Start Recognition"}
+              {isStarted ? "Stop Recognition" : "Start Recognition"}
             </button>
           </div>
 

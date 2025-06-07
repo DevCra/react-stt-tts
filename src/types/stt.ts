@@ -44,6 +44,6 @@ export interface STTHookResult {
   unmute: () => void;
   mediaStream: MediaStream | null;
   isInitialized: boolean;
-  isListening: boolean;
+  isStarted: boolean;
   isMuted: boolean;
 }
