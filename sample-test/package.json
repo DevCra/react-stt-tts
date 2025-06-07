@@ -8,7 +8,10 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "local-test": "cd .. && pnpm install && pnpm build && cd sample-test && pnpm install && pnpm dev"
+    "clean": "rm -rf dist/ node_modules/",
+    "build-package": "cd .. && pnpm clean && pnpm install && pnpm build",
+    "setup-test": "pnpm clean && pnpm install",
+    "local-test": "pnpm build-package && pnpm setup-test && pnpm dev"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.7",
