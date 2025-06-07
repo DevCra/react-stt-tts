@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useSTTConfig } from "@/providers/VoiceProvider";
 import STTFactory from "@/services/STTFactory";
 import type { STTEngine, STTHookResult, STTStartOptions } from "@/types/stt";
@@ -13,28 +13,35 @@ export const useSTT = (): STTHookResult => {
   const [isListening, setIsListening] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
 
-  const start = useCallback(async (options?: STTStartOptions) => {
-    setIsInitialized(false);
-    setIsListening(true);
+  const start = useCallback(
+    async (options?: STTStartOptions) => {
+      if (!engineRef.current) {
+        engineRef.current = STTFactory.create(sttConfig);
+      }
 
-    const startOptions: STTStartOptions = {
-      ...options,
-      onMediaStream: (stream) => {
-        setMediaStream(stream);
+      setIsInitialized(false);
+      setIsListening(true);
 
-        options?.onMediaStream?.(stream);
-      },
-    };
+      const startOptions: STTStartOptions = {
+        ...options,
+        onMediaStream: (stream) => {
+          setMediaStream(stream);
 
-    await engineRef.current
-      ?.start(startOptions)
-      .then(() => {
-        setIsInitialized(true);
-      })
-      .catch((error) => {
-        throw error;
-      });
-  }, []);
+          options?.onMediaStream?.(stream);
+        },
+      };
+
+      await engineRef.current
+        ?.start(startOptions)
+        .then(() => {
+          setIsInitialized(true);
+        })
+        .catch((error) => {
+          throw error;
+        });
+    },
+    [sttConfig],
+  );
 
   const stop = useCallback(() => {
     setIsInitialized(false);
@@ -54,12 +61,6 @@ export const useSTT = (): STTHookResult => {
     setIsMuted(false);
     engineRef.current?.unmute();
   }, []);
-
-  useEffect(() => {
-    if (!engineRef.current) {
-      engineRef.current = STTFactory.create(sttConfig);
-    }
-  }, [sttConfig]);
 
   return {
     start,

@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useTTSConfig } from "@/providers/VoiceProvider";
 import TTSFactory from "@/services/TTSFactory";
 import type { TTSEngine, TTSHookResult, TTSResult, TTSStartOptions } from "@/types/tts";
@@ -10,30 +10,37 @@ export const useTTS = (): TTSHookResult => {
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  const start = useCallback(async (options?: TTSStartOptions): Promise<TTSResult | void> => {
-    setIsSpeaking(true);
+  const start = useCallback(
+    async (options?: TTSStartOptions): Promise<TTSResult | void> => {
+      if (!engineRef.current) {
+        engineRef.current = TTSFactory.create(ttsConfig);
+      }
 
-    const startOptions: TTSStartOptions = {
-      ...options,
-      ...(options?.onMediaStream
-        ? options.onMediaStream
-        : {
-            onMediaStream: (stream) => {
-              setMediaStream(stream);
-            },
-          }),
-    };
+      setIsSpeaking(true);
 
-    const result = await engineRef.current?.start(startOptions);
+      const startOptions: TTSStartOptions = {
+        ...options,
+        ...(options?.onMediaStream
+          ? options.onMediaStream
+          : {
+              onMediaStream: (stream) => {
+                setMediaStream(stream);
+              },
+            }),
+      };
 
-    setIsSpeaking(false);
+      const result = await engineRef.current?.start(startOptions);
 
-    if (!result) {
-      throw new Error("Not existed TTS result.");
-    }
+      setIsSpeaking(false);
 
-    return result;
-  }, []);
+      if (!result) {
+        throw new Error("Not existed TTS result.");
+      }
+
+      return result;
+    },
+    [ttsConfig],
+  );
 
   const stop = useCallback(() => {
     setIsSpeaking(false);
@@ -45,12 +52,6 @@ export const useTTS = (): TTSHookResult => {
   const getAnalyserNode = useCallback(() => {
     return engineRef.current?.getAnalyserNode() ?? null;
   }, []);
-
-  useEffect(() => {
-    if (!engineRef.current) {
-      engineRef.current = TTSFactory.create(ttsConfig);
-    }
-  }, [ttsConfig]);
 
   return {
     start,
