@@ -40,6 +40,10 @@ export interface STTStartOptions {
 export interface STTHookResult {
   start: (options?: STTStartOptions) => Promise<void>;
   stop: () => void;
+  mute: () => void;
+  unmute: () => void;
   mediaStream: MediaStream | null;
+  isInitialized: boolean;
   isListening: boolean;
+  isMuted: boolean;
 }
