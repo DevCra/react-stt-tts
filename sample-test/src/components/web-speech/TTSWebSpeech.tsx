@@ -5,9 +5,9 @@ export default function TTSWebSpeech() {
   const [text, setText] = useState("");
   const { start, stop } = useTTS();
 
-  const handleSpeak = () => {
+  const handleSpeak = async () => {
     if (text.trim()) {
-      start({
+      const res = await start({
         text,
         onAudioStarted: () => {
           console.log("Audio started");
@@ -16,6 +16,8 @@ export default function TTSWebSpeech() {
           console.log("Audio ended");
         },
       });
+
+      console.log(res);
     }
   };
 

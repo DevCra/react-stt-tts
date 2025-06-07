@@ -4,6 +4,9 @@ export default class TTSWebSpeechEngine implements TTSEngine {
   private config: TTSConfig;
   private mediaStream: MediaStream | null = null;
   private analyserNode: AnalyserNode | null = null;
+  private audioContext: AudioContext | null = null;
+  private mediaRecorder: MediaRecorder | null = null;
+  private audioChunks: Blob[] = [];
   private onMediaStream?: (stream: MediaStream | null) => void;
   private onAudioStarted?: () => void;
   private onAudioEnded?: () => void;
@@ -11,10 +14,6 @@ export default class TTSWebSpeechEngine implements TTSEngine {
 
   constructor(config: TTSConfig) {
     this.config = config;
-  }
-
-  getMediaStream(): MediaStream | null {
-    return this.mediaStream;
   }
 
   // Analyze Waveform Data
@@ -32,6 +31,21 @@ export default class TTSWebSpeechEngine implements TTSEngine {
       throw new Error("Speech synthesis is not supported in this browser.");
     }
 
+    this.audioContext = new AudioContext();
+    const destination = this.audioContext.createMediaStreamDestination();
+    this.mediaStream = destination.stream;
+
+    this.onMediaStream?.(this.mediaStream);
+
+    this.mediaRecorder = new MediaRecorder(this.mediaStream);
+    this.audioChunks = [];
+
+    this.mediaRecorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        this.audioChunks.push(event.data);
+      }
+    };
+
     const utterance = new SpeechSynthesisUtterance(options.text);
 
     utterance.lang = this.config.language || "en-US";
@@ -44,12 +58,15 @@ export default class TTSWebSpeechEngine implements TTSEngine {
 
     const startTime = Date.now();
 
+    this.mediaRecorder.start();
+
     utterance.onstart = () => {
       this.onAudioStarted?.();
     };
 
     utterance.onend = () => {
       this.onAudioEnded?.();
+      this.mediaRecorder?.stop();
     };
 
     utterance.onerror = (event) => {
@@ -60,12 +77,15 @@ export default class TTSWebSpeechEngine implements TTSEngine {
 
     return {
       text: options.text,
-      audio: new Blob([], { type: "audio/wav" }),
+      audio: new Blob(this.audioChunks, { type: "audio/wav" }),
       duration: Date.now() - startTime,
     };
   }
 
   stop() {
     window.speechSynthesis.cancel();
+
+    this.audioContext?.close();
+    this.mediaRecorder?.stop();
   }
 }
