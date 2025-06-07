@@ -6,7 +6,7 @@ React based Speech-to-Text and Text-to-Speech library with multiple engine suppo
 
 - Multiple STT (Speech-to-Text) engines support:
   - Web Speech API - Speech Recognition (Browser built-in) ✅
-  - Web Audio API
+  - Web Audio API (Coming soon)
   - Google Gemini Live API (Coming soon)
   - Google Cloud V2 (Coming soon)
   - Azure Speech SDK (Coming soon)
@@ -14,7 +14,7 @@ React based Speech-to-Text and Text-to-Speech library with multiple engine suppo
   - Return Zero (Coming soon)
 - Multiple TTS (Text-to-Speech) engines support:
   - Web Speech API - Speech Synthesis (Browser built-in) ✅
-  - Web Audio API
+  - Web Audio API (Coming soon)
   - Google Gemini Live API (Coming soon)
   - Google Cloud (Coming soon)
   - Azure Speech SDK (Coming soon)
@@ -48,7 +48,6 @@ pnpm add react-stt-tts
 ```tsx
 import { VoiceProvider, useSTT, useTTS } from "react-stt-tts";
 
-// STT Configuration
 const sttConfig = {
   model: "web-speech",
   language: "en-US", // English
@@ -56,7 +55,6 @@ const sttConfig = {
   interimResults: true, // Show interim results
 };
 
-// TTS Configuration
 const ttsConfig = {
   model: "web-speech",
   language: "en-US", // English
@@ -74,28 +72,18 @@ function App() {
 }
 
 function YourComponent() {
-  // Using STT hook
-  const { start: startSTT, stop: stopSTT, isListening } = useSTT();
-  // Using TTS hook
-  const { start: startTTS, stop: stopTTS, isSpeaking } = useTTS();
+  const { start: startSTT, stop: stopSTT } = useSTT();
+  const { start: startTTS, stop: stopTTS } = useTTS();
 
   return (
     <div>
       {/* STT Controls */}
-      <button onClick={startSTT} disabled={isListening}>
-        Start Speech Recognition
-      </button>
-      <button onClick={stopSTT} disabled={!isListening}>
-        Stop Speech Recognition
-      </button>
+      <button onClick={startSTT}>Start Speech Recognition</button>
+      <button onClick={stopSTT}>Stop Speech Recognition</button>
 
       {/* TTS Controls */}
-      <button onClick={() => startTTS("Hello!")} disabled={isSpeaking}>
-        Speak
-      </button>
-      <button onClick={stopTTS} disabled={!isSpeaking}>
-        Stop
-      </button>
+      <button onClick={() => startTTS({text: "Hello!")}}>Start Speech Synthesis</button>
+      <button onClick={stopTTS}>Stop Speech Synthesis</button>
     </div>
   );
 }
@@ -130,6 +118,7 @@ interface STTConfig {
   continuous?: boolean;
   interimResults?: boolean;
   maxAlternatives?: number;
+  constraints?: MediaStreamConstraints;
 }
 ```
 
@@ -145,6 +134,7 @@ interface TTSConfig {
     | "azure-speech-sdk"
     | "azure-realtime-api"
     | "return-zero";
+  speaker?: string;
   apiKey?: string;
   voice?: string;
   language?: string;
@@ -157,30 +147,19 @@ interface TTSConfig {
 ### useVoiceConfig Hook
 
 ```typescript
-const {
-  sttConfig, // Current STT configuration
-  ttsConfig, // Current TTS configuration
-  setSTTConfig, // Function to update STT configuration
-  setTTSConfig, // Function to update TTS configuration
-} = useVoiceConfig();
+const { sttConfig, ttsConfig, setSTTConfig, setTTSConfig } = useVoiceConfig();
 ```
 
 ### useSTTConfig Hook
 
 ```typescript
-const {
-  sttConfig, // Current STT configuration
-  setSTTConfig, // Function to update STT configuration
-} = useSTTConfig();
+const { sttConfig, setSTTConfig } = useSTTConfig();
 ```
 
 ### useTTSConfig Hook
 
 ```typescript
-const {
-  ttsConfig, // Current TTS configuration
-  setTTSConfig, // Function to update TTS configuration
-} = useTTSConfig();
+const { ttsConfig, setTTSConfig } = useTTSConfig();
 ```
 
 ### useSTT Hook
@@ -189,16 +168,21 @@ const {
 const {
   start, // Start speech recognition with options
   stop, // Stop speech recognition
-  isListening, // Whether listening
+  mute,
+  unmute,
+  mediaStream,
+  isInitialized,
+  isStarted,
+  isMuted,
 } = useSTT();
 
-// STTStartOptions interface
 interface STTStartOptions {
-  onMediaStream?: (stream: MediaStream | null) => void;
+  onMediaStream?: (stream: MediaStream | null) => void; // Media Stream transfer
   onAfterMicPermission?: () => void;
   onRecognizing?: (text: string) => void;
   onRecognized?: (text: string) => void;
   onCancelled?: (reason: string) => void;
+  onEnded?: () => void;
   onSessionStopped?: () => void;
 }
 ```
@@ -209,19 +193,19 @@ interface STTStartOptions {
 const {
   start, // Speak text with options
   stop, // Stop speaking
-  isSpeaking, // Whether speaking
+  analyserNode, // Waveform data
 } = useTTS();
 
-// TTSStartOptions interface
 interface TTSStartOptions {
   text: string;
+  onMediaStream?: (stream: MediaStream | null) => void; // Media Stream transfer
   onAudioStarted?: () => void;
   onAudioEnded?: () => void;
   onError?: (error: unknown) => void;
 }
 
-// TTSResult interface
 interface TTSResult {
+  text: string;
   audio: Blob;
   duration: number;
 }
