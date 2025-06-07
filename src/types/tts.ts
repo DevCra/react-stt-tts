@@ -21,12 +21,12 @@ export interface TTSConfig {
 export interface TTSEngine {
   getMediaStream(): MediaStream | null;
   getAnalyserNode(): AnalyserNode | null;
-  start(options?: TTSStartOptions): Promise<TTSResult | void>;
+  start(options: TTSStartOptions): Promise<TTSResult>;
   stop(): void;
 }
 
 export interface TTSStartOptions {
-  text?: string;
+  text: string;
   onMediaStream?: (stream: MediaStream | null) => void; // Media Stream transfer
   onAudioStarted?: () => void;
   onAudioEnded?: () => void;
@@ -34,12 +34,13 @@ export interface TTSStartOptions {
 }
 
 export interface TTSResult {
+  text: string;
   audio: Blob;
   duration: number;
 }
 
 export interface TTSHookResult {
-  start: (options?: TTSStartOptions) => Promise<TTSResult | void>;
+  start: (options: TTSStartOptions) => Promise<TTSResult>;
   stop: () => void;
   getAnalyserNode: () => AnalyserNode | null;
   mediaStream: MediaStream | null;

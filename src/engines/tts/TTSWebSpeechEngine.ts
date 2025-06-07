@@ -22,7 +22,7 @@ export default class TTSWebSpeechEngine implements TTSEngine {
     return this.analyserNode;
   }
 
-  async start(options?: TTSStartOptions): Promise<TTSResult | void> {
+  async start(options: TTSStartOptions): Promise<TTSResult> {
     this.onMediaStream = options?.onMediaStream;
     this.onAudioStarted = options?.onAudioStarted;
     this.onAudioEnded = options?.onAudioEnded;
@@ -32,7 +32,7 @@ export default class TTSWebSpeechEngine implements TTSEngine {
       throw new Error("Speech synthesis is not supported in this browser.");
     }
 
-    const utterance = new SpeechSynthesisUtterance(options?.text || "");
+    const utterance = new SpeechSynthesisUtterance(options.text);
 
     utterance.lang = this.config.language || "en-US";
     utterance.voice = this.config.voice
@@ -44,18 +44,25 @@ export default class TTSWebSpeechEngine implements TTSEngine {
 
     const startTime = Date.now();
 
+    utterance.onstart = () => {
+      this.onAudioStarted?.();
+    };
+
     utterance.onend = () => {
-      return {
-        audio: new Blob([], { type: "audio/wav" }),
-        duration: Date.now() - startTime,
-      };
+      this.onAudioEnded?.();
     };
 
     utterance.onerror = (event) => {
-      this.onError?.(new Error("Speech synthesis error: " + event.error));
+      this.onError?.(event.error);
     };
 
     window.speechSynthesis.speak(utterance);
+
+    return {
+      text: options.text,
+      audio: new Blob([], { type: "audio/wav" }),
+      duration: Date.now() - startTime,
+    };
   }
 
   stop() {

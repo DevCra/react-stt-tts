@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 import { useTTSConfig } from "@/providers/VoiceProvider";
 import TTSFactory from "@/services/TTSFactory";
-import type { TTSEngine, TTSHookResult, TTSResult, TTSStartOptions } from "@/types/tts";
+import type { TTSEngine, TTSHookResult, TTSStartOptions } from "@/types/tts";
 
 export const useTTS = (): TTSHookResult => {
   const { ttsConfig } = useTTSConfig();
@@ -11,7 +11,7 @@ export const useTTS = (): TTSHookResult => {
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
 
   const start = useCallback(
-    async (options?: TTSStartOptions): Promise<TTSResult | void> => {
+    async (options: TTSStartOptions) => {
       if (!engineRef.current) {
         engineRef.current = TTSFactory.create(ttsConfig);
       }
@@ -26,10 +26,6 @@ export const useTTS = (): TTSHookResult => {
       };
 
       const result = await engineRef.current?.start(startOptions);
-
-      if (!result) {
-        throw new Error("Not existed TTS result.");
-      }
 
       return result;
     },
