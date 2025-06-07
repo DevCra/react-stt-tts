@@ -41,6 +41,12 @@ pnpm add react-stt-tts
 
 ## Samples - [StackBlitz](https://stackblitz.com/edit/vitejs-vite-luuiqllo?file=src%2FApp.tsx)
 
+## Local Library Test
+
+```bash
+cd sample-test && pnpm local-test
+```
+
 ## Usage
 
 ### Basic Usage with Web Speech API
