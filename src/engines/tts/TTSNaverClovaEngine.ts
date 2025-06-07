@@ -17,6 +17,7 @@ export default class TTSNaverClovaEngine implements TTSEngine {
     return this.mediaStream;
   }
 
+  // Analyze Waveform Data
   getAnalyserNode(): AnalyserNode | null {
     return this.analyserNode;
   }

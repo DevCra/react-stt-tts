@@ -17,6 +17,7 @@ export default class TTSWebAudioEngine implements TTSEngine {
     return this.mediaStream;
   }
 
+  // Analyze Waveform Data
   getAnalyserNode(): AnalyserNode | null {
     return this.analyserNode;
   }

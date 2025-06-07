@@ -17,6 +17,7 @@ export default class TTSGoogleCloudEngine implements TTSEngine {
     return this.mediaStream;
   }
 
+  // Analyze Waveform Data
   getAnalyserNode(): AnalyserNode | null {
     return this.analyserNode;
   }
