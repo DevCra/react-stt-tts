@@ -43,5 +43,4 @@ export interface TTSHookResult {
   stop: () => void;
   getAnalyserNode: () => AnalyserNode | null;
   mediaStream: MediaStream | null;
-  isSpeaking: boolean;
 }

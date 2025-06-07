@@ -7,8 +7,8 @@ export const useTTS = (): TTSHookResult => {
   const { ttsConfig } = useTTSConfig();
 
   const engineRef = useRef<TTSEngine | null>(null);
+
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
-  const [isSpeaking, setIsSpeaking] = useState(false);
 
   const start = useCallback(
     async (options?: TTSStartOptions): Promise<TTSResult | void> => {
@@ -16,22 +16,16 @@ export const useTTS = (): TTSHookResult => {
         engineRef.current = TTSFactory.create(ttsConfig);
       }
 
-      setIsSpeaking(true);
-
       const startOptions: TTSStartOptions = {
         ...options,
-        ...(options?.onMediaStream
-          ? options.onMediaStream
-          : {
-              onMediaStream: (stream) => {
-                setMediaStream(stream);
-              },
-            }),
+        onMediaStream: (stream) => {
+          setMediaStream(stream);
+
+          options?.onMediaStream?.(stream);
+        },
       };
 
       const result = await engineRef.current?.start(startOptions);
-
-      setIsSpeaking(false);
 
       if (!result) {
         throw new Error("Not existed TTS result.");
@@ -43,8 +37,8 @@ export const useTTS = (): TTSHookResult => {
   );
 
   const stop = useCallback(() => {
-    setIsSpeaking(false);
     setMediaStream(null);
+
     engineRef.current?.stop();
     engineRef.current = null;
   }, []);
@@ -58,6 +52,5 @@ export const useTTS = (): TTSHookResult => {
     stop,
     getAnalyserNode,
     mediaStream,
-    isSpeaking,
   };
 };
