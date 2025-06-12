@@ -187,7 +187,7 @@ interface STTStartOptions {
   onAfterMicPermission?: () => void;
   onRecognizing?: (text: string) => void;
   onRecognized?: (text: string) => void;
-  onCancelled?: (reason: string) => void;
+  onError?: (reason: string) => void;
   onEnded?: () => void;
   onSessionStopped?: () => void;
 }

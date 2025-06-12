@@ -8,7 +8,7 @@ export default class STTGoogleCloudV2Engine implements STTEngine {
   private onAfterMicPermission?: () => void;
   private onRecognizing?: (text: string) => void;
   private onRecognized?: (text: string) => void;
-  private onCancelled?: (reason: string) => void;
+  private onError?: (reason: string) => void;
   private onSessionStopped?: () => void;
 
   constructor(config: STTConfig) {
@@ -20,7 +20,7 @@ export default class STTGoogleCloudV2Engine implements STTEngine {
     this.onAfterMicPermission = options?.onAfterMicPermission;
     this.onRecognizing = options?.onRecognizing;
     this.onRecognized = options?.onRecognized;
-    this.onCancelled = options?.onCancelled;
+    this.onError = options?.onError;
     this.onSessionStopped = options?.onSessionStopped;
 
     // Actual Google Cloud STT integration will be implemented later

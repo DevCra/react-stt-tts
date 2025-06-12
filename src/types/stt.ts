@@ -21,7 +21,7 @@ export interface STTConfig {
 
 export interface STTEngine {
   start(options?: STTStartOptions): Promise<void>;
-  stop(): void;
+  stop(): void | Promise<void>;
   mute(): void;
   unmute(): void;
 }
@@ -31,7 +31,7 @@ export interface STTStartOptions {
   onAfterMicPermission?: () => void;
   onRecognizing?: (text: string) => void;
   onRecognized?: (text: string) => void;
-  onCancelled?: (reason: string) => void;
+  onError?: (reason: string) => void;
   onEnded?: () => void;
   onSessionStopped?: () => void;
 }

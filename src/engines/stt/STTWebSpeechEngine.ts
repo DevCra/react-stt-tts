@@ -18,7 +18,7 @@ export default class STTWebSpeechEngine implements STTEngine {
   private onRecognizing?: (text: string) => void;
   private onRecognized?: (text: string) => void;
   private onEnded?: () => void;
-  private onCancelled?: (reason: string) => void;
+  private onError?: (reason: string) => void;
 
   constructor(config: STTConfig) {
     this.config = {
@@ -49,14 +49,14 @@ export default class STTWebSpeechEngine implements STTEngine {
     onRecognizing,
     onRecognized,
     onEnded,
-    onCancelled,
+    onError,
   }: STTStartOptions) {
     this.onMediaStream = onMediaStream;
     this.onAfterMicPermission = onAfterMicPermission;
     this.onRecognizing = onRecognizing;
     this.onRecognized = onRecognized;
     this.onEnded = onEnded;
-    this.onCancelled = onCancelled;
+    this.onError = onError;
 
     if (!this.recognition) {
       await this.getUserMedia(this.config.constraints!);
@@ -103,14 +103,14 @@ export default class STTWebSpeechEngine implements STTEngine {
       };
 
       this.recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
-        this.onCancelled?.(`Speech recognition error: ${event.error}`);
+        this.onError?.(`Speech recognition error: ${event.error}`);
         this.recognition?.stop();
       };
 
       this.recognition.start();
     } catch (error) {
-      console.error("Failed to start speech recognition: " + error);
-      this.onCancelled?.(`Speech recognition error: ${error}`);
+      console.error("Failed to start STT Web Speech Engine: " + error);
+      this.onError?.(`Failed to start STT Web Speech Engine: ${error}`);
     }
   }
 

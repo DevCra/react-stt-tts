@@ -18,7 +18,7 @@ export default function STTWebSpeech() {
         setRecognizedText(recognizedTextRef.current);
         console.log("recognized", text);
       },
-      onCancelled: (reason: string) => {
+      onError: (reason: string) => {
         console.log("cancelled", reason);
       },
     });
