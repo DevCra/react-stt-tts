@@ -58,8 +58,8 @@ export default class STTWebSpeechEngine implements STTEngine {
     this.onEnded = onEnded;
     this.onError = onError;
 
-    if (!this.recognition) {
-      await this.getUserMedia(this.config.constraints!);
+    if (!this.mediaStream && this.config.constraints) {
+      await this.getUserMedia(this.config.constraints);
     }
 
     try {
