@@ -1,6 +1,5 @@
 import {
   STTWebSpeechEngine,
-  STTWebAudioEngine,
   STTGoogleGeminiEngine,
   STTGoogleCloudV2Engine,
   STTAzureSpeechSDKEngine,
@@ -14,8 +13,6 @@ export default class STTFactory {
     switch (config.model) {
       case "web-speech":
         return new STTWebSpeechEngine(config);
-      case "web-audio":
-        return new STTWebAudioEngine(config);
       case "google-gemini":
         return new STTGoogleGeminiEngine(config);
       case "google-cloud-v2":

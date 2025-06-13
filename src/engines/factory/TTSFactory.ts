@@ -1,6 +1,5 @@
 import {
   TTSWebSpeechEngine,
-  TTSWebAudioEngine,
   TTSGoogleGeminiEngine,
   TTSGoogleCloudEngine,
   TTSAzureSpeechSDKEngine,
@@ -14,8 +13,6 @@ export default class TTSFactory {
     switch (config.model) {
       case "web-speech":
         return new TTSWebSpeechEngine(config);
-      case "web-audio":
-        return new TTSWebAudioEngine(config);
       case "google-gemini":
         return new TTSGoogleGeminiEngine(config);
       case "google-cloud":

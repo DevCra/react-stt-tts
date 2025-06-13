@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef } from "react";
 import { useSTTConfig } from "@/providers/VoiceProvider";
-import STTFactory from "@/services/STTFactory";
+import STTFactory from "@/engines/factory/STTFactory";
 import type { STTEngine, STTHookResult, STTStartOptions } from "@/types/stt";
 
 export const useSTT = (): STTHookResult => {

@@ -6,7 +6,6 @@ React based Speech-to-Text and Text-to-Speech library with multiple engine suppo
 
 - Multiple STT (Speech-to-Text) engines support:
   - Web Speech API - Speech Recognition (Browser built-in) ✅
-  - Web Audio API (Coming soon)
   - Google Gemini Live API (Coming soon)
   - Google Cloud V2 (Coming soon)
   - Azure Speech SDK (Coming soon)
@@ -14,7 +13,6 @@ React based Speech-to-Text and Text-to-Speech library with multiple engine suppo
   - Return Zero (Coming soon)
 - Multiple TTS (Text-to-Speech) engines support:
   - Web Speech API - Speech Synthesis (Browser built-in) ✅
-  - Web Audio API (Coming soon)
   - Google Gemini Live API (Coming soon)
   - Google Cloud (Coming soon)
   - Azure Speech SDK (Coming soon)
@@ -111,7 +109,6 @@ function YourComponent() {
 interface STTConfig {
   model:
     | "web-speech"
-    | "web-audio"
     | "google-gemini"
     | "google-cloud-v2"
     | "azure-speech-sdk"
@@ -134,7 +131,6 @@ interface STTConfig {
 interface TTSConfig {
   model:
     | "web-speech"
-    | "web-audio"
     | "google-gemini"
     | "google-cloud-v2"
     | "azure-speech-sdk"

@@ -1,6 +1,5 @@
 export type TTSModel =
   | "web-speech"
-  | "web-audio"
   | "google-gemini"
   | "google-cloud"
   | "azure-speech-sdk"
