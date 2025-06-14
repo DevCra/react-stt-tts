@@ -16,6 +16,7 @@ export interface STTConfig {
   interimResults?: boolean;
   maxAlternatives?: number;
   constraints?: MediaStreamConstraints;
+  bufferSize?: number;
 }
 
 export interface STTEngine {
@@ -27,6 +28,7 @@ export interface STTEngine {
 
 export interface STTStartOptions {
   onMediaStream?: (stream: MediaStream | null) => void; // Media Stream transfer
+  onAudioRecorded?: (buffer: Iterable<number>) => void; // Audio recorded
   onAfterMicPermission?: () => void;
   onRecognizing?: (text: string) => void;
   onRecognized?: (text: string) => void;
