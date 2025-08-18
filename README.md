@@ -216,3 +216,9 @@ interface TTSResult {
 ## License
 
 MIT
+
+###
+
+- [github 레포](https://github.com/DevCra/react-stt-tts)
+- STT/TTS 다중 엔진 교체 가능한 라이브러리용 오픈 소스코드
+- 기본 설계를 잡아두고 현재 Web API만 구현되어있음
